@@ -1,25 +1,46 @@
-import ImagesApiServise from './ImagesCardApi';
 import imageCard from './templates/imageCard.hbs';
+import Notiflix from 'notiflix';
+import ImagesApiServise from './jsParts/ImagesCardApi';
+import LoadMoreButton from './jsParts/load-more-button';
 
 const refs = {
   searchform: document.querySelector('.search-form'),
-  loadMore: document.querySelector('[data-action="load-more"]'),
   placeForCard: document.querySelector('.gallery'),
 };
-refs.loadMore.addEventListener('click', onLoadMore);
-refs.searchform.addEventListener('submit', onSearch);
+
 const imagesApiServise = new ImagesApiServise();
+const loadMoreBtn = new LoadMoreButton({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
+
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+refs.searchform.addEventListener('submit', onSearch);
+
+function fetchCards() {
+  loadMoreBtn.disable();
+  imagesApiServise.fetchImages().then(card => {
+    imageMarkup(card);
+    loadMoreBtn.enable();
+  });
+}
 
 function onSearch(e) {
   e.preventDefault();
   cleanAll();
   imagesApiServise.query = e.currentTarget.elements.searchQuery.value;
+  if (imagesApiServise.query.trim() === '') {
+    return Notiflix.Notify.failure('Введите, что хотите найти');
+  }
   imagesApiServise.resetPage();
-  imagesApiServise.fetchImages().then(imageMarkup);
+  loadMoreBtn.show();
+  fetchCards();
+  console.log(fetchCards);
+  // console.log(imagesApiServise);
 }
 
 function onLoadMore() {
-  imagesApiServise.fetchImages().then(imageMarkup);
+  fetchCards();
 }
 
 function imageMarkup(hits) {
@@ -29,5 +50,3 @@ function imageMarkup(hits) {
 function cleanAll() {
   refs.placeForCard.innerHTML = '';
 }
-
-// added: markup templates, markup function, placing cards on click

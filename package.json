@@ -1,7 +1,6 @@
 {
   "name": "js-image-search",
   "version": "2.0.0",
-  "description": "",
   "homepage": "https://Artem-Chop.github.io/js-image-searche",
   "scripts": {
     "start": "parcel src/*.html",
@@ -25,5 +24,11 @@
     "parcel-transformer-hbs": "^1.0.4",
     "posthtml-include": "^1.7.4"
   },
-  "browserslist": "> 0.5%, last 2 versions, not dead"
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "bugs": {
+    "url": "https://github.com/Artem-Chop/js-image-search/issues"
+  },
+  "main": "index.js",
+  "author": "",
+  "description": ""
 }
